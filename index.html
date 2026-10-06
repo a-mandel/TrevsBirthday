@@ -372,12 +372,6 @@
     </div>
     
 
-    <div style="position:absolute;top:0;left:0;right:0;padding:var(--space-4) var(--space-4) var(--space-3);pointer-events:none">
-      <div style="display:flex;justify-content:center;align-items:center;width:100%;font-family:'Rubik Spray Paint',sans-serif;font-weight:400;font-size:calc((min(100vw, 560px) - 40px)/15.2);letter-spacing:.005em;white-space:nowrap;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(18,17,16,.75);animation:rise .9s .1s both, goldGlint 8.7s 1.4s ease-in-out infinite">
-        <span style="flex:1;min-width:0;text-align:center;font-size:calc((min(100vw, 560px) - 44px) / 18.1);-webkit-text-stroke:0.4px rgba(18,17,16,.92);paint-order:stroke fill;text-shadow:0 0 1px rgba(18,17,16,.45), 0 1px 2px rgba(18,17,16,.9);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision">Oct 9th &amp; 11th, 2026 @ 1PM</span>
-      </div>
-      <div style="height:2px;background:rgba(255,255,255,.92);box-shadow:0 1px 3px rgba(18,17,16,.55);margin-top:var(--space-3);transform-origin:left;animation:sweep 1s .3s both cubic-bezier(.22,.7,.2,1)"></div>
-    </div>
 
     <div ref="{{ titleRef }}" style="position:absolute;left:0;right:0;top:58px;padding:var(--space-2) var(--space-4) 0;pointer-events:none;will-change:transform,opacity">
       
@@ -405,7 +399,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--color-divider)">
       <div data-reveal="" style="padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider);border-right:1px solid var(--color-divider)">
         <h6 style="margin:0 0 5px;font-family:'Rubik Spray Paint',sans-serif;font-weight:400;font-size:28px;line-height:1.06;text-transform:uppercase;color:var(--color-accent-400);-webkit-text-stroke:0.4px rgba(18,17,16,.92);paint-order:stroke fill;text-shadow:0 0 1px rgba(18,17,16,.45), 0 1px 1px rgba(18,17,16,.3);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision">WHEN?</h6>
-        <p style="margin:0;font-size:14px;font-weight:600;line-height:1.35">October 9 and 11<br>1:00 PM → sunset</p>
+        <p style="margin:0;font-size:14px;font-weight:600;line-height:1.35">Friday, October 9<br>Sunday, October 11<br>1:00 PM → sunset</p>
       </div>
       <div data-reveal="" style="padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider)">
         <h6 style="margin:0 0 5px;font-family:'Rubik Spray Paint',sans-serif;font-weight:400;font-size:28px;line-height:1.06;text-transform:uppercase;color:var(--color-accent-400);-webkit-text-stroke:0.4px rgba(18,17,16,.92);paint-order:stroke fill;text-shadow:0 0 1px rgba(18,17,16,.45), 0 1px 1px rgba(18,17,16,.3);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision">WHERE?</h6>
@@ -449,8 +443,8 @@
           <div class="field">
             <label>Which day?</label>
             <div class="seg" style="width:100%">
-              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isD9 }}" onChange="{{ pickD9 }}">Oct 9</label>
-              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isD11 }}" onChange="{{ pickD11 }}">Oct 11</label>
+              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isD9 }}" onChange="{{ pickD9 }}">Fri 10/9</label>
+              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isD11 }}" onChange="{{ pickD11 }}">Sun 10/11</label>
               <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isDBoth }}" onChange="{{ pickDBoth }}">Both</label>
             </div>
           </div>
@@ -1260,7 +1254,7 @@ class Component extends DCLogic {
     const tMaybe = this.state.tally ? (this.state.tally.maybe || 0) : maybe;
     const order = { yes: 0, maybe: 1, no: 2 };
     const label = { yes: 'Yes', maybe: 'Maybe', no: "Can't" };
-    const dayTag = { '9': 'Oct 9', '11': 'Oct 11', both: 'Both days' };
+    const dayTag = { '9': 'Fri 10/9', '11': 'Sun 10/11', both: 'Both days' };
     const vmode = this.state.videoMode;
     const vol = this.state.vol == null ? 0.8 : this.state.vol;
     const playing = !!this.state.playing;
@@ -1649,7 +1643,7 @@ class Component extends DCLogic {
       mineStatusLabel: mine ? (mine.status === 'yes' ? "You're on the list" : mine.status === 'maybe' ? 'Pencilled in' : 'Next time') : '',
       mineLine: mine ? (mine.status === 'no'
         ? 'Sorry to miss you, ' + mine.name.split(' ')[0] + '. We\u2019ll send a photograph of the sunset.'
-        : mine.name + (mine.guests ? ' + ' + mine.guests : '') + ' · ' + (mine.days === '9' ? 'October 9' : mine.days === '11' ? 'October 11' : 'October 9 and 11') + ' at 1 PM' + (mine.bring ? ' · bringing ' + mine.bring : '')) : '',
+        : mine.name + (mine.guests ? ' + ' + mine.guests : '') + ' · ' + (mine.days === '9' ? 'Friday, October 9' : mine.days === '11' ? 'Sunday, October 11' : 'Friday, October 9 and Sunday, October 11') + ' at 1 PM' + (mine.bring ? ' · bringing ' + mine.bring : '')) : '',
 
       showList,
       emptyList: tHeads === 0 && tMaybe === 0,
