@@ -12,9 +12,11 @@ function sheet_() {
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['When', 'Name', 'Status', 'Extra guests', 'Bringing']);
+    sh.appendRow(['When', 'Name', 'Status', 'Extra guests', 'Bringing', 'Days']);
     sh.setFrozenRows(1);
   }
+  // older sheets were made before the party had two days
+  if (!sh.getRange(1, 6).getValue()) sh.getRange(1, 6).setValue('Days');
   return sh;
 }
 
@@ -45,6 +47,7 @@ function doGet() {
       status: String(r[2] || 'yes').toLowerCase(),
       guests: Number(r[3]) || 0,
       bring: String(r[4] || ''),
+      days: String(r[5] || ''),          // '9', '11' or 'both'; blank on replies from before the day question
       at: r[0] ? new Date(r[0]).getTime() : 0
     };
   }).sort(function (a, b) { return a.at - b.at; });
@@ -63,7 +66,8 @@ function doPost(e) {
       name,
       String(d.status || 'yes'),
       Number(d.guests) || 0,
-      String(d.bring || '').slice(0, 200)
+      String(d.bring || '').slice(0, 200),
+      ['9', '11', 'both'].indexOf(String(d.days)) >= 0 ? String(d.days) : ''
     ]);
   }
   return doGet();

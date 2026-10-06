@@ -447,6 +447,14 @@
             </div>
           </div>
           <div class="field">
+            <label>Which day?</label>
+            <div class="seg" style="width:100%">
+              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isD9 }}" onChange="{{ pickD9 }}">Oct 9</label>
+              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isD11 }}" onChange="{{ pickD11 }}">Oct 11</label>
+              <label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:46px;transition:background .25s"><input type="radio" name="rsvp-days" checked="{{ isDBoth }}" onChange="{{ pickDBoth }}">Both</label>
+            </div>
+          </div>
+          <div class="field">
             <label>Bringing anyone?</label>
             <div style="display:flex;align-items:center;gap:var(--space-3)">
               <button class="btn btn-secondary" onClick="{{ dec }}" aria-label="One fewer guest" style="min-width:46px;min-height:46px;justify-content:center;font-size:19px;transition:background .2s, transform .12s" style-active="transform:scale(.94)">–</button>
@@ -614,7 +622,7 @@ const PARTY = {
 PARTY.captions = PARTY.clips.map(() => '');
 
 class Component extends DCLogic {
-  state = { loading: true, splashGone: false, pa: 0, pb: 0, winner: null, i: 0, name: '', status: 'yes', guests: 0, bring: '', soundOn: false, videoBlocked: false, videoPlaying: false, videoMode: false, dipping: false, slot: 0, spring: false, arcTrackOn: false, launch: false, volShow: false, volFlare: false, dialShown: true, everPressed: false, vol: 0.8, playing: false, rsvps: [], mine: null, editing: false, error: '', shared: false, tally: null, sending: false, sendFailed: false };
+  state = { loading: true, splashGone: false, pa: 0, pb: 0, winner: null, i: 0, name: '', status: 'yes', days: 'both', guests: 0, bring: '', soundOn: false, videoBlocked: false, videoPlaying: false, videoMode: false, dipping: false, slot: 0, spring: false, arcTrackOn: false, launch: false, volShow: false, volFlare: false, dialShown: true, everPressed: false, vol: 0.8, playing: false, rsvps: [], mine: null, editing: false, error: '', shared: false, tally: null, sending: false, sendFailed: false };
   stackRef = React.createRef();
   titleRef = React.createRef();
   bandRef = React.createRef();
@@ -1252,6 +1260,7 @@ class Component extends DCLogic {
     const tMaybe = this.state.tally ? (this.state.tally.maybe || 0) : maybe;
     const order = { yes: 0, maybe: 1, no: 2 };
     const label = { yes: 'Yes', maybe: 'Maybe', no: "Can't" };
+    const dayTag = { '9': 'Oct 9', '11': 'Oct 11', both: 'Both days' };
     const vmode = this.state.videoMode;
     const vol = this.state.vol == null ? 0.8 : this.state.vol;
     const playing = !!this.state.playing;
@@ -1619,6 +1628,10 @@ class Component extends DCLogic {
       pickYes: () => this.setState({ status: 'yes' }),
       pickMaybe: () => this.setState({ status: 'maybe' }),
       pickNo: () => this.setState({ status: 'no' }),
+      isD9: this.state.days === '9', isD11: this.state.days === '11', isDBoth: this.state.days !== '9' && this.state.days !== '11',
+      pickD9: () => this.setState({ days: '9' }),
+      pickD11: () => this.setState({ days: '11' }),
+      pickDBoth: () => this.setState({ days: 'both' }),
       inc: () => this.setState(s => ({ guests: Math.min(4, s.guests + 1) })),
       dec: () => this.setState(s => ({ guests: Math.max(0, s.guests - 1) })),
       guestLabel: this.state.guests === 0 ? 'Just me' : '+' + this.state.guests + (this.state.guests === 1 ? ' guest' : ' guests'),
@@ -1626,17 +1639,17 @@ class Component extends DCLogic {
       submit: () => {
         const n = this.state.name.trim();
         if (n.length < 2) { this.setState({ error: 'A name, please — even a first name.' }); return; }
-        const entry = { name: n, status: this.state.status, guests: this.state.guests, bring: this.state.bring.trim(), at: Date.now() };
+        const entry = { name: n, status: this.state.status, days: this.state.days || 'both', guests: this.state.guests, bring: this.state.bring.trim(), at: Date.now() };
         const rest = (mine ? rsvps.filter(r => r.at !== mine.at) : rsvps);
         this.persist([...rest, entry], entry);
         this.setState({ editing: false, error: '' });
         this.sendToSheet(entry);
       },
-      editMine: () => this.setState({ editing: true, name: mine ? mine.name : '', status: mine ? mine.status : 'yes', guests: mine ? mine.guests : 0, bring: mine ? mine.bring : '' }),
+      editMine: () => this.setState({ editing: true, name: mine ? mine.name : '', status: mine ? mine.status : 'yes', days: (mine && mine.days) || 'both', guests: mine ? mine.guests : 0, bring: mine ? mine.bring : '' }),
       mineStatusLabel: mine ? (mine.status === 'yes' ? "You're on the list" : mine.status === 'maybe' ? 'Pencilled in' : 'Next time') : '',
       mineLine: mine ? (mine.status === 'no'
         ? 'Sorry to miss you, ' + mine.name.split(' ')[0] + '. We\u2019ll send a photograph of the sunset.'
-        : mine.name + (mine.guests ? ' + ' + mine.guests : '') + ' · October 9 and 11 at 1 PM' + (mine.bring ? ' · bringing ' + mine.bring : '')) : '',
+        : mine.name + (mine.guests ? ' + ' + mine.guests : '') + ' · ' + (mine.days === '9' ? 'October 9' : mine.days === '11' ? 'October 11' : 'October 9 and 11') + ' at 1 PM' + (mine.bring ? ' · bringing ' + mine.bring : '')) : '',
 
       showList,
       emptyList: tHeads === 0 && tMaybe === 0,
@@ -1647,7 +1660,7 @@ class Component extends DCLogic {
       headCount: String(tHeads),
       entries: [...rsvps].sort((a, b) => (order[a.status] - order[b.status]) || a.at - b.at).map(r => ({
         name: r.name + (r.guests ? ' + ' + r.guests : ''),
-        detail: r.bring ? 'Bringing ' + r.bring : (r.status === 'yes' ? 'Replied yes' : r.status === 'maybe' ? 'Might make it' : 'Out this time'),
+        detail: [r.status !== 'no' && dayTag[r.days], r.bring ? 'Bringing ' + r.bring : (r.status === 'yes' ? 'Replied yes' : r.status === 'maybe' ? 'Might make it' : 'Out this time')].filter(Boolean).join(' · '),
         statusLabel: label[r.status],
         tagStyle: tagStyle(r.status)
       })),
