@@ -198,7 +198,7 @@
   <sc-if value="{{ splashOn }}" hint-placeholder-val="{{ true }}">
     <div data-splash-layer="" data-no-wiggle="" style="{{ splashStyle }}">
       <div data-splash-bg="" style="position:absolute;inset:0;overflow:hidden;background:#1d1a18"><img src="assets/splash-sunset.jpg" alt="" style="width:100%;height:100%;object-fit:cover;object-position:center 42%;animation:panArc 19s linear infinite alternate"></div>
-      <div data-splash-inner="" style="position:relative;width:100%;max-width:560px;padding:0 var(--space-4);display:flex;flex-direction:column;gap:var(--space-6)">
+      <div data-splash-inner="" style="position:absolute;left:50%;top:18%;transform:translateX(-50%);width:100%;max-width:560px;padding:0 var(--space-4);box-sizing:border-box">
         <div style="display:flex;flex-direction:column;gap:var(--space-4)">
           <div style="position:relative;height:56px">
             <div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:16px;border-radius:999px;background:rgba(255,255,255,.1);box-shadow:inset 0 1px 2px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.12);overflow:hidden">
@@ -209,20 +209,9 @@
             </div>
           </div>
         </div>
-
-        <div style="display:flex;align-items:baseline;gap:var(--space-3);font-family:'Bungee',sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 0 1px rgba(18,17,16,.9), 0 1px 2px rgba(18,17,16,.9);-webkit-text-stroke:0.6px rgba(18,17,16,.95);paint-order:stroke fill">
-          <span>Loading the party</span>
-          <span style="margin-left:auto;color:var(--color-accent-300)">{{ raceLine }}</span>
-        </div>
-
-        <div style="display:flex;justify-content:center;align-items:center;width:100%;font-family:'Rubik Spray Paint',sans-serif;font-weight:400;font-size:calc((min(100vw, 560px) - 40px)/15.2);letter-spacing:.005em;white-space:nowrap;text-transform:uppercase;color:#fff;text-shadow:0 0 1px rgba(18,17,16,.9), 0 1px 2px rgba(18,17,16,.9);-webkit-text-stroke:0.6px rgba(18,17,16,.95);paint-order:stroke fill">
-          <span style="color:var(--color-accent-400);flex:none">/</span>
-          <span style="flex:1;text-align:center">{{ pctLabel }}</span>
-          <span style="color:var(--color-accent-400);flex:none">/</span>
-        </div>
-        <div style="height:2px;background:rgba(255,255,255,.92);box-shadow:0 1px 3px rgba(18,17,16,.55);margin-top:calc(var(--space-4) * -1);transform-origin:left;animation:sweep 1s .2s both cubic-bezier(.22,.7,.2,1)"></div>
+      </div>
+      <div data-splash-inner="" style="position:relative;width:100%;max-width:560px;padding:0 var(--space-4);margin-top:10vh;display:flex;flex-direction:column">
         <h2 style="margin:0;text-align:center;font-family:'Rubik Spray Paint',sans-serif;font-weight:400;font-size:calc((min(100vw, 560px) - 44px) / 12.1);line-height:1.06;letter-spacing:-.015em;text-transform:uppercase;color:#fff;text-shadow:0 0 1px rgba(18,17,16,.9), 0 1px 1px rgba(18,17,16,.85), 0 3px 14px rgba(18,17,16,.45);-webkit-text-stroke:0.4px rgba(18,17,16,.92);paint-order:stroke fill;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision"><span style="display:block;font-size:1.45em;white-space:nowrap">Fleet Weekend</span><span style="color:var(--color-accent-400)">Andre's</span> Roof Deck<span style="display:block;font-size:.85em;white-space:nowrap">Sunday, October 11th</span></h2>
-
       </div>
     </div>
   </sc-if>
